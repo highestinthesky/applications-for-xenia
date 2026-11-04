@@ -6,30 +6,16 @@ import { goldCard as T } from '../copy.js';
 import { tierFor, endsAtContribution, daysInMonth, formatDollars, MILLION } from '../logic.js';
 import { answers, save } from '../store.js';
 
-const STRIPS = 7;
-
-/** The backdrop: vertical plates that slide to reveal the matching plate of the new tier. */
+/** The backdrop: one full-screen plate that slides out as the plate of the new tier slides in. */
 class Plates {
   constructor(stage, tier) {
     this.tier = tier;
-    this.strips = Array.from({ length: STRIPS }, (_, i) => {
-      const strip = h('div', { class: 'plate-strip' });
-      strip.append(this.plate(tier, i));
-      return strip;
-    });
-    this.el = h('div', { class: 'plates', 'data-tier': tier }, this.strips);
+    this.el = h('div', { class: 'plates', 'data-tier': tier }, this.plate(tier));
     stage.prepend(this.el);
   }
 
-  plate(tier, i) {
-    return h('div', {
-      class: 'plate',
-      style: {
-        backgroundImage: `url(${asset(`plate-${tier}`)})`,
-        backgroundSize: `${STRIPS * 100}% auto`,
-        backgroundPosition: `${(i / (STRIPS - 1)) * 100}% 50%`,
-      },
-    });
+  plate(tier) {
+    return h('div', { class: 'plate', style: { backgroundImage: `url(${asset(`plate-${tier}`)})` } });
   }
 
   /** One slide at a time: a slider dragged across several tiers ends on the latest one, with no jumps. */
@@ -41,21 +27,19 @@ class Plates {
     this.moving = false;
   }
 
-  /** Every plate moves the same way: the new plate rises from below and pushes the old one out the top. */
+  /** The whole background moves as one: the new plate rises from below and pushes the old one out the top. */
   slide(tier) {
     this.tier = tier;
     document.body.dataset.tier = tier;
     this.el.dataset.tier = tier;
-    return Promise.all(this.strips.flatMap((strip, i) => {
-      const options = { duration: 620, delay: i * 45, easing: EASE.inout };
-      const old = strip.firstElementChild;
-      const next = this.plate(tier, i);
-      strip.append(next);
-      return [
-        anim(next, [{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], options),
-        anim(old, [{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }], options).then(() => old.remove()),
-      ];
-    }));
+    const options = { duration: 620, easing: EASE.inout };
+    const old = this.el.firstElementChild;
+    const next = this.plate(tier);
+    this.el.append(next);
+    return Promise.all([
+      anim(next, [{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], options),
+      anim(old, [{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }], options).then(() => old.remove()),
+    ]);
   }
 }
 

@@ -46,7 +46,7 @@ const MENU = [
   ['aeolus', 'Aeolus'],
   ['ithaca', 'Ithaca'],
   ['goldcard', 'Gold Card'],
-  ['i589', 'I-589'],
+  ['i589', 'Asylum'],
 ];
 let setCurrent = () => {};
 

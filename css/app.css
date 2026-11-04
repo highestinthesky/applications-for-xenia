@@ -233,9 +233,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* ------------------------------------------------------------- Gold Card */
 
-.plates { position: absolute; inset: 0; display: flex; background: #323437; }
-.plate-strip { position: relative; flex: 1 1 0; overflow: hidden; box-shadow: inset -.06rem 0 0 rgba(0, 0, 0, .55), inset .06rem 0 0 rgba(255, 255, 255, .12); }
-.plate { position: absolute; inset: 0; background-repeat: no-repeat; }
+.plates { position: absolute; inset: 0; overflow: hidden; background: #323437; }
+.plate { position: absolute; inset: 0; background: center / cover no-repeat; }
 
 body { --well: #323437; --well-hi: #828181; --metal-ink: #f2f2f0; --metal-face: #515254; }
 body[data-tier='gold'] { --well: #784e01; --well-hi: #bd9031; --metal-ink: #fff8e7; --metal-face: #916308; --money: var(--rich); }

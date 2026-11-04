@@ -20,7 +20,7 @@ export function h(tag, props = {}, ...kids) {
   return el;
 }
 
-const ASSET_VERSION = 2; // raise after replacing an image, so browsers fetch the new one
+const ASSET_VERSION = 3; // raise after replacing an image, so browsers fetch the new one
 export const asset = (name) => `assets/${name}.webp?v=${ASSET_VERSION}`;
 export const img = (name, props = {}) => h('img', { src: asset(name), alt: '', draggable: 'false', ...props });
 
