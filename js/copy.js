@@ -10,7 +10,7 @@ export const aeolus1 = {
       'My squadron and I have just earned *kleos* in the land of the Cyclops.',
     ],
   },
-  r2: 'Welcome, stranger, to Aeolia! I, Aeolus, king of this island, offer a lavish *feast* of *roasted meats* to you and your fellow crew of Achaeans!',
+  r2: 'Welcome to Aeolia! I, Aeolus, king of this island, offer a lavish *feast* of *roasted meats* to you and your crew!',
   q3: {
     text: 'Please, stay for as long as you like! Will you join us for our feast?',
     options: ['I would be honored to, great Aeolus!', 'Sorry, but I need to be on my way, please send me off.'],
@@ -30,7 +30,7 @@ export const aeolus1 = {
     ],
   },
   q7: {
-    text: 'And what has befallen you since you sailed from Troy?',
+    text: 'And what has befallen you since you left Troy?',
     options: [
       'We raided the Cicones, escaped the Lotus-eaters, and blinded the Cyclops Polyphemus to escape his cave.',
       'The Cyclops Polyphemus ate my men, so I blinded him and shouted my name as we sailed away.',
@@ -58,17 +58,17 @@ export const aeolus2 = {
   q1: {
     text: '*Back again {name}? Surely we launched you well, sped you on your way?*',
     options: [
-      'My *mutinous crew undid me*! They thought you secretly handed me riches!',
+      'My *mutinous crew undid me*! They thought you secretly handed me *treasure*!',
       'I was betrayed while in a *cruel sleep* - I could not have stopped it!!',
     ],
   },
   q2: {
     options: [
-      'Please set this right! *You have the* ***power***!',
+      '*Set this right, my friends*! *You have the* ***power***!',
       'I plead with you, with my most *humble, gentle appeals!*',
     ],
   },
-  r3: '*Away from my island — fast — most cursed man alive! You’re hated by the gods above!*',
+  r3: '*Away from my island — fast — most cursed man alive! Nothing good comes from hosting one hated by the immortals!*',
 };
 
 export const ithaca = {
@@ -99,10 +99,10 @@ export const ithaca = {
       '*Are you a friend of father’s,*',
       '*a guest from the old days?*',
       '*Once, crowds of other men*',
-      '*would come to our house on visits—visitor that he was,*',
+      '*would come to our house on visits — visitor that he was,*',
       '*when he walked among the living.*',
     ],
-    options: ['*I’ve been friends with your father forever*', '*Old lord Laertes knows me very well.*'],
+    options: ['*I’ve been friends with your father since forever.*', '*Old lord Laertes knows me very well.*'],
   },
   q6: {
     lines: [
