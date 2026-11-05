@@ -17,20 +17,20 @@ export const aeolus1 = {
   },
   r4: 'Help yourself, brave warriors!',
   q5: {
-    text: 'Who are you, and where are you from?',
+    text: '**Who are you, and where are you from?**',
     nameLabel: 'Name',
     homelandLabel: 'Homeland',
     homelands: ['Ithaca', 'Pylos', 'Sparta'],
   },
   q6: {
-    text: 'Tell me of Troy. How did the city fall?',
+    text: '**Tell me of Troy. How did the city fall?**',
     options: [
       'We hid inside a wooden horse, and they thought it was a gift',
       'We opened the gates from the inside and massacred everyone.',
     ],
   },
   q7: {
-    text: 'And what has befallen you since you left Troy?',
+    text: '**And what has befallen you since you left Troy?**',
     options: [
       'We raided the Cicones, escaped the Lotus-eaters, and blinded the Cyclops Polyphemus to escape his cave.',
       'The Cyclops Polyphemus ate my men, so I blinded him and shouted my name as we sailed away.',
@@ -73,13 +73,13 @@ export const aeolus2 = {
 
 export const ithaca = {
   line: 'Now, imagine you’re a stranger visiting Ithaca',
-  r1: 'If only my father *might drop from the clouds* and drive these damned suitors out…',
-  r2: '*Greetings, stranger! Here in our house you’ll find a royal welcome. Have supper first, then tell me what you need.*',
+  r1: '**If only my father might drop from the clouds and drive these freeloading suitors out…**',
+  r2: '*Greetings, stranger! Here in my palace you’ll find a royal welcome. Have supper first, then tell me what you need.*',
   r3: 'Look at those filthy suitors, *feed[ing] on another’s goods and go[ing] scot-free!* If only my father was back, *they’d all pray to be faster on their feet than richer in bars of gold and heavy robes!*',
   q4: {
     lines: [
       '*Tell me about yourself now, clearly, point by point.*',
-      '*Who are you?*',
+      '**Who are you?**',
       '*Where are you from? Your city?*',
       '*Your parents?*',
       '*What sort of vessel brought you? Why did the sailors land you here in Ithaca?*',
@@ -91,13 +91,12 @@ export const ithaca = {
       '*My name is Mentes, lord of the Taphian men, and I’ve sailed here.*',
       '*I’ve come to trade out iron for bronze, we’ve moored our ship far from town*',
     ],
-    // What each answer writes on the application. The second answer gives no name, so those stay blank.
     identity: [{ name: 'Mentes', homeland: 'Taphos' }, { name: '', homeland: '' }],
   },
   q5: {
     lines: [
-      '*Are you a friend of father’s,*',
-      '*a guest from the old days?*',
+      '**Are you a friend of father’s,**',
+      '**a guest from the old days?**',
       '*Once, crowds of other men*',
       '*would come to our house on visits — visitor that he was,*',
       '*when he walked among the living.*',
@@ -137,7 +136,7 @@ export const ithaca = {
 };
 
 export const goldCard = {
-  line: 'Imagine you’re a wealthy resident of another country looking to migrate',
+  line: 'Imagine you’re a wealthy foreigner looking to migrate',
   title: 'Application for Xenia',
   fields: {
     name: 'First Name, Last Name',
@@ -162,8 +161,7 @@ export const goldCard = {
 };
 
 export const i589 = {
-  line: 'Now imagine you’re no longer wealthy and have fled your country due to conflict.',
-  // The real form's title, with "Asylum" struck through and "Xenia" written beside it.
+  line: 'Imagine you’re a refugee seeking asylum.',
   title: { before: 'Form I-589, Application for ', struck: 'Asylum', after: ' Xenia' },
   start: 'START HERE',
   infoTitle: 'Your information',
@@ -190,17 +188,9 @@ export const i589 = {
   pending: 'Pending Review…',
 };
 
-export const home = {
-  title: 'Where will you be seeking Xenia?',
-  forms: [
-    { id: 'aeolus', label: 'Aeolus' },
-    { id: 'ithaca', label: 'Ithaca' },
-    { id: 'goldcard', label: 'Gold Card' },
-    { id: 'i589', label: 'Asylum' },
-  ],
-};
-
 export const shared = {
   continueLabel: 'Continue',
-  unsupported: 'Applications for Xenia is made for a laptop or a larger screen. Please open it on one.',
+  unsupported: 'This website is made for a larger screen, please switch.',
+  slot: 'Your line goes here',
+  closing: 'closing screen tbd',
 };
