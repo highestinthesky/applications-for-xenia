@@ -68,7 +68,7 @@ export const aeolus2 = {
       'I plead with you, with my most *humble, gentle appeals!*',
     ],
   },
-  r3: '*Away from my island — fast — most cursed man alive! Nothing good comes from hosting one hated by the immortals!*',
+  r3: '*Away from my island — fast — most cursed man alive!* **You’re hated by the immortals!**',
 };
 
 export const ithaca = {
@@ -190,9 +190,17 @@ export const i589 = {
   pending: 'Pending Review…',
 };
 
+export const home = {
+  title: 'Where will you be seeking Xenia?',
+  forms: [
+    { id: 'aeolus', label: 'Aeolus' },
+    { id: 'ithaca', label: 'Ithaca' },
+    { id: 'goldcard', label: 'Gold Card' },
+    { id: 'i589', label: 'Asylum' },
+  ],
+};
+
 export const shared = {
   continueLabel: 'Continue',
   unsupported: 'Applications for Xenia is made for a laptop or a larger screen. Please open it on one.',
-  slot: 'Your line goes here',
-  closing: 'Closing screen: not designed yet',
 };

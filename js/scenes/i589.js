@@ -4,7 +4,7 @@ import { Dropdown, stamp, blackout, drawnLine } from '../parts.js';
 import { COUNTRIES } from '../countries.js';
 import { i589 as T, goldCard as G, shared } from '../copy.js';
 import { asylumOutcome } from '../logic.js';
-import { answers, save } from '../store.js';
+import { answers } from '../store.js';
 
 /** A clock whose hands are separate pieces: set them directly, or spin them. */
 class Clock {
@@ -93,7 +93,7 @@ function choiceGroup(key, question, onchange) {
 
 export async function run(ctx) {
   const { stage } = ctx;
-  await preload(['clock-face', 'calendar-base', 'calendar-page', 'flower-sprite', 'stamp-approved', 'stamp-pending']);
+  await preload(['clock-face', 'calendar-base', 'calendar-page', 'flower-sprite', 'stamp-approved', 'stamp-rejected']);
 
   // Opens as the Gold Card does. This line is longer, so it draws faster to take about as long.
   const black = ctx.black || blackout(stage);
@@ -110,13 +110,10 @@ export async function run(ctx) {
     error.hidden = true;
   };
 
-  // The name and the two countries are the Gold Card's answers, carried over greyed out,
-  // so they cannot be changed here. A visitor rejected under $1M was never asked for the
-  // countries, so for them this form asks.
-  const locked = (label, value) => h('div', { class: 'f-field' }, h('span', {}, label), h('div', { class: 'f-locked-value' }, value));
+  // This form stands alone, so it asks for everything itself.
+  const nameInput = h('input', { class: 'f-input', type: 'text', autocomplete: 'off', oninput: () => { error.hidden = true; } });
   const pickers = {};
   const country = (key, label) => {
-    if (answers[key]) return locked(label, answers[key]);
     pickers[key] = new Dropdown({ label, placeholder: G.chooseCountry, options: COUNTRIES, onchange: () => { error.hidden = true; } });
     return h('div', { class: 'f-field' }, h('span', {}, label), pickers[key].el);
   };
@@ -127,20 +124,22 @@ export async function run(ctx) {
   const front = h('form', { class: 'f-front', novalidate: true },
     h('h1', { class: 'f-title' }, T.title.before, h('s', {}, T.title.struck), T.title.after),
     h('p', { class: 'f-notice' }, T.start),
+    // The first question, before the name, as on the Gold Card (user's decision, 2026-11-04).
+    h('section', { class: 'f-part' }, choiceGroup('fees', T.fees, onPick)),
     h('section', { class: 'f-part' },
       h('h2', {}, T.infoTitle),
-      locked(T.name, `${answers.first} ${answers.last}`),
+      h('label', { class: 'f-field' }, h('span', {}, T.name), nameInput),
       country('residence', G.fields.residence),
       country('citizenship', G.fields.citizenship)),
     h('section', { class: 'f-part' }, choiceGroup('grounds', T.grounds, onPick)),
     h('section', { class: 'f-part' }, choiceGroup('harm', T.harm, onPick)),
     h('section', { class: 'f-part' }, choiceGroup('fear', T.fear, onPick)),
     h('p', { class: 'f-notice f-notice-strong' }, T.burden),
-    h('section', { class: 'f-part' }, choiceGroup('fees', T.fees, onPick)),
     error,
     submit,
   );
-  const back = h('div', { class: 'f-back' }, h('p', { class: 'f-pending' }, T.pending));
+  const pending = h('p', { class: 'f-pending' }, T.pending);
+  const back = h('div', { class: 'f-back' }, pending);
   const paper = h('div', { class: 'f-paper' }, front, back);
 
   const room = h('div', { class: 'room' },
@@ -155,7 +154,7 @@ export async function run(ctx) {
   await new Promise((resolve) => {
     front.addEventListener('submit', (e) => {
       e.preventDefault();
-      const complete = ['grounds', 'harm', 'fear', 'fees'].every((k) => picks[k] !== undefined) && Object.values(pickers).every((p) => p.value);
+      const complete = nameInput.value.trim() && ['grounds', 'harm', 'fear', 'fees'].every((k) => picks[k] !== undefined) && Object.values(pickers).every((p) => p.value);
       if (complete) resolve();
       else {
         error.hidden = false;
@@ -164,12 +163,12 @@ export async function run(ctx) {
     });
   });
 
+  answers.name = nameInput.value.trim();
   for (const [key, picker] of Object.entries(pickers)) answers[key] = picker.value;
   answers.grounds = T.grounds.options[picks.grounds];
   answers.harm = T.harm.options[picks.harm];
   answers.fear = T.fear.options[picks.fear];
   answers.canPay = picks.fees === 0;
-  save();
 
   // The paper flips to Pending Review. Years pass on the clock, calendar and flower.
   paper.parentElement.scrollTop = 0;
@@ -181,25 +180,18 @@ export async function run(ctx) {
 
   const outcome = asylumOutcome(answers.canPay);
   answers.asylum = outcome;
-  save();
   const go = h('button', { class: 'f-button f-continue', type: 'button' }, shared.continueLabel);
   await wait(9000);
-  if (outcome === 'approved') {
-    clock.stop();
-    calendar.stop();
-    flower.stop();
-    await stamp(back, 'approved', { y: 52 });
-    await wait(1200);
-  } else {
-    // PENDING lands and time keeps passing around it. Continue comes later and only moves the
-    // presentation on; the case itself stays pending.
-    await stamp(back, 'pending', { y: 52 });
-    await wait(5000);
-  }
-  back.append(go);
-  await new Promise((r) => go.addEventListener('click', r, { once: true }));
+  // Either answer waits the same years, then time stops and the stamp lands (user's decision, 2026-11-04).
   clock.stop();
   calendar.stop();
   flower.stop();
-  stage.replaceChildren();
+  await stamp(back, outcome, { y: 52 });
+  pending.style.visibility = 'hidden'; // the case is decided; keeps its space so nothing shifts
+  await wait(1200);
+  back.append(go);
+  await new Promise((r) => go.addEventListener('click', r, { once: true }));
+
+  // Ends on black. The homepage opens from here.
+  await anim(blackout(stage), [{ opacity: 0 }, { opacity: 1 }], { duration: 900 });
 }

@@ -4,7 +4,7 @@ import { Dropdown, stamp, blackout, drawnLine } from '../parts.js';
 import { COUNTRIES } from '../countries.js';
 import { goldCard as T } from '../copy.js';
 import { tierFor, endsAtContribution, daysInMonth, formatDollars, MILLION } from '../logic.js';
-import { answers, save } from '../store.js';
+import { answers } from '../store.js';
 
 /** The backdrop: one full-screen plate that slides out as the plate of the new tier slides in. */
 class Plates {
@@ -191,10 +191,6 @@ function askCountries(pop) {
   const submit = submitButton(() => done({ residence: live.value, citizenship: citizen.value }), true);
   const check = () => {
     submit.disabled = !(live.value && citizen.value);
-    // Kept as soon as it is picked, so leaving by the menu cannot lose it to the sample answers.
-    if (live.value) answers.residence = live.value;
-    if (citizen.value) answers.citizenship = citizen.value;
-    save();
   };
   const live = new Dropdown({ label: T.fields.residence, placeholder: T.chooseCountry, options: COUNTRIES, onchange: check });
   const citizen = new Dropdown({ label: T.fields.citizenship, placeholder: T.chooseCountry, options: COUNTRIES, onchange: check });
@@ -273,23 +269,19 @@ export async function run(ctx) {
   const amount = await popOut(stage, sheet, 'contribution', (pop) => askContribution(pop, plates));
   answers.contribution = amount;
   sheet.fill('contribution', formatDollars(amount));
-  save();
 
   const name = await popOut(stage, sheet, 'name', askName);
   Object.assign(answers, { first: name.first, last: name.last });
-  save();
   sheet.fill('name', `${name.first} ${name.last}`);
 
   if (endsAtContribution(amount)) {
-    // Only the name is asked. The I-589 asks for the countries this form never wanted to know.
-    Object.assign(answers, { goldCard: 'rejected', residence: '', citizenship: '' });
-    save();
+    // Only the name is asked, as an afterthought before the rejection.
+    answers.goldCard = 'rejected';
     await wait(400);
     await sheet.skipToDecision(['dob', 'residence', 'citizenship'], T.decision);
     await decide(sheet, 'rejected');
   } else {
     answers.dob = await popOut(stage, sheet, 'dob', askDob);
-    save();
     sheet.fill('dob', answers.dob);
 
     const where = await popOut(stage, sheet, 'residence', askCountries);
@@ -313,13 +305,11 @@ export async function run(ctx) {
     answers.terrorism = terror;
     sheet.fill('terrorism', terror);
     answers.goldCard = 'approved';
-    save();
     await wait(400);
     await decide(sheet, 'approved');
   }
-  save();
 
-  // Ends on black. The I-589 opens from here as an alternate reality, not a continuation of this application.
+  // Ends on black. The homepage opens from here.
   const end = blackout(stage);
   await anim(end, [{ opacity: 0 }, { opacity: 1 }], { duration: 900 });
   [...stage.children].forEach((c) => { if (c !== end) c.remove(); });

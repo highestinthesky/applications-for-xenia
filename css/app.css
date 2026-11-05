@@ -46,23 +46,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   background: #111; color: #eee; font: 500 18px/1.5 var(--plain);
 }
 
-/* ------------------------------------------------------------- Quick menu */
-
-.menu { position: fixed; z-index: 90; left: .8rem; top: .8rem; font-family: var(--plain); --focus: #fff; }
-.menu-button {
-  display: grid; align-content: center; justify-items: center; gap: .28rem;
-  width: 2.6rem; height: 2.6rem; padding: 0; border: 0; background: rgba(0, 0, 0, .62); transition: background .12s ease-out;
-}
-.menu-button span { display: block; width: 1.3rem; height: .16rem; background: #fff; }
-.menu-button:hover { background: #000; }
-.menu-list { margin: .3rem 0 0; padding: .3rem 0; list-style: none; min-width: 10rem; background: #111; }
-.menu-item {
-  display: block; width: 100%; padding: .5rem .9rem; border: 0; background: none; color: #fff;
-  font: 500 1rem var(--plain); text-align: left; transition: background .12s ease-out;
-}
-.menu-item:hover { background: #3a3a3a; }
-.menu-item[aria-current='true'] { font-weight: 800; }
-
 /* ------------------------------------------------------------- Aeolia */
 
 .world { position: absolute; inset: 0; overflow: hidden; }
@@ -353,7 +336,7 @@ body[data-tier='rusted'] { --well: #411d0e; --well-hi: #946945; --metal-ink: #f4
   width: 100%; padding: .55rem .7rem; font: 500 1.05rem var(--plain); color: var(--form-ink);
   background: var(--white); border: .08rem solid var(--slate); border-radius: 0; box-shadow: none;
 }
-.f-locked-value { padding: .55rem .7rem; font: 500 1.05rem var(--plain); background: var(--warm-grey); color: var(--form-ink); }
+.f-input { width: 100%; padding: .55rem .7rem; font: 500 1.05rem var(--plain); color: var(--form-ink); background: var(--white); border: .08rem solid var(--slate); border-radius: 0; }
 .f-group { margin: 0; padding: 0; border: 0; display: grid; gap: .45rem; }
 .f-group legend { padding: 0 0 .5rem; font: 600 1.05rem/1.35 var(--plain); }
 .f-choice { display: flex; gap: .6rem; align-items: center; font: 500 1.02rem var(--plain); cursor: pointer; }
@@ -367,3 +350,16 @@ body[data-tier='rusted'] { --well: #411d0e; --well-hi: #946945; --metal-ink: #f4
 .f-error { margin: 0; font: 600 1rem var(--plain); color: var(--crimson); }
 .f-back .stamp { width: 60% !important; }
 .closing { color: #111; }
+
+/* Homepage. Crude on purpose (user's "homepage vision"): white, square, plain type, no flair. */
+.home { position: absolute; inset: 0; display: flex; flex-direction: column; background: #fff; color: #000; }
+.home-waves { --tile: 34rem; flex: none; overflow: hidden; }
+.home-key { flex: none; height: 2.92rem; margin: .7rem 0; background-position: left center; background-size: auto 100%; background-repeat: repeat-x; }
+.home-middle { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.2rem; }
+.home-title { margin: 0; font: 400 2.6rem/1.1 'Times New Roman', Times, serif; }
+.home-links { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; align-items: center; gap: .55rem; }
+.home-link { color: #000; padding: 0 .4rem; font-size: 2.1rem; line-height: 1.2; }
+.home-aeolus { font-family: var(--script); background: var(--mist); }
+.home-ithaca { font-family: 'Pinyon Script', var(--script); font-size: 2.7rem; background: #ffc069; }
+.home-goldcard { font-family: var(--rich); background: #bd9031; }
+.home-i589 { font-family: var(--plain); background: var(--sage); }

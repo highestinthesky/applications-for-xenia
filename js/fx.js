@@ -116,7 +116,6 @@ export function waitClick(target) {
       resolve();
     };
     const onKey = (e) => {
-      if (e.target.closest?.('.menu')) return;
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         done();

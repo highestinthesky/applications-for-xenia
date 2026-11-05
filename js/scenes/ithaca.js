@@ -1,8 +1,8 @@
 // Ithaca: one large parchment that records the whole conversation. Welcome comes before questions.
 import { h, img, anim, EASE, wait, fadeIn, fadeOut, typeInto, preload, waitClick, asset } from '../fx.js';
-import { blackout, richNodes, Scroll, stamp, parchmentLabels as P } from '../parts.js';
+import { blackout, drawnLine, richNodes, Scroll, stamp, parchmentLabels as P } from '../parts.js';
 import { ithaca as T } from '../copy.js';
-import { answers, save } from '../store.js';
+import { answers } from '../store.js';
 
 /** The A4 sheet. A new sheet lies under it, so sliding this one away reveals the next. */
 class Page {
@@ -93,13 +93,7 @@ class Page {
 
 /** The dark screen and the drawn line that open Ithaca. */
 async function opening(stage, black) {
-  const line = h('p', { class: 'drawn-line' });
-  stage.append(line);
-  await typeInto(line, T.line, { cps: 11 });
-  await wait(1200);
-  await fadeOut(line, 500); // the words fade out at once
-  line.remove();
-  await wait(500);
+  await drawnLine(stage, T.line, 11, { rich: false });
   await fadeOut(black, 2000);
   black.remove();
 }
@@ -192,7 +186,6 @@ export async function run(ctx) {
   await wait(300);
   answers.ithacaGift = T.q8.options[await page.choose(T.q8.options)];
   await record(answers.ithacaGift);
-  save();
   await wait(900);
   await anim(page.holder, [{ transform: 'translateX(0)' }, { transform: 'translateX(-120vw)' }], { duration: 1100, easing: EASE.inout });
 
@@ -201,7 +194,7 @@ export async function run(ctx) {
   await wait(2600);
   await scroll.leave();
 
-  // Ends on black. The Gold Card opens from here with its own line.
+  // Ends on black. The homepage opens from here.
   await wait(600);
   const end = blackout(stage);
   await fadeIn(end, 1600);

@@ -14,7 +14,7 @@ export function tierFor(amount) {
 export const endsAtContribution = (amount) => amount < MILLION;
 
 /** I-589: the fee answer alone decides. Grounds, harm and fear answers are not even passed in. */
-export const asylumOutcome = (canPayFees) => (canPayFees ? 'approved' : 'pending');
+export const asylumOutcome = (canPayFees) => (canPayFees ? 'approved' : 'rejected');
 
 export function daysInMonth(month, year) {
   return new Date(year, month, 0).getDate();

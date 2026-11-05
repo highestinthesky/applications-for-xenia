@@ -430,16 +430,34 @@ export class Dropdown {
 
 // ------------------------------------------------------------------ Black screens and slots
 
-/** Opens a modern form: a line drawn in on the black screen, gone at once. The black stays. */
-export async function drawnLine(stage, text, cps = 16) {
-  await document.fonts.load("2.9rem 'Faculty Glyphic'").catch(() => {});
-  const line = h('p', { class: 'drawn-line drawn-line-rich' });
+/**
+ * Opens a form: a line drawn in on the black screen, gone at once. The black stays.
+ * A click anywhere ends it early.
+ */
+export async function drawnLine(stage, text, cps = 16, { rich = true } = {}) {
+  if (rich) await document.fonts.load("2.9rem 'Faculty Glyphic'").catch(() => {});
+  const line = h('p', { class: rich ? 'drawn-line drawn-line-rich' : 'drawn-line' });
   stage.append(line);
-  await typeInto(line, text, { cps });
-  await wait(1200);
-  await fadeOut(line, 500);
+  const token = { skip: false };
+  let onClick;
+  const skipped = new Promise((resolve) => {
+    onClick = () => {
+      token.skip = true;
+      resolve();
+    };
+  });
+  document.addEventListener('click', onClick);
+  const played = (async () => {
+    await typeInto(line, text, { cps, token });
+    await wait(1200);
+    if (token.skip) return;
+    await fadeOut(line, 500);
+    await wait(500);
+  })();
+  await Promise.race([played, skipped]);
+  document.removeEventListener('click', onClick);
+  if (token.skip) await anim(line, [{ opacity: 0 }], { duration: 150 });
   line.remove();
-  await wait(500);
 }
 
 /** Pitch black overlay. */
@@ -449,11 +467,5 @@ export function blackout(stage) {
   return el;
 }
 
-/** Held place for text the user has not written yet. Visible on purpose. */
-export function slot(stage, text = shared.slot) {
-  const el = h('div', { class: 'slot' }, `[ ${text} ]`);
-  stage.append(el);
-  return el;
-}
 
 export const parchmentLabels = P;

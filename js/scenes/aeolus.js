@@ -4,7 +4,7 @@ import { h, img, anim, EASE, wait, preload, fadeIn, fadeOut, seeded } from '../f
 import { CloudBox, Scroll, Curtain, ask, remark, stamp, curtainAssets, blackout, parchmentLabels as P } from '../parts.js';
 import { aeolus1 as T, aeolus2 as T2 } from '../copy.js';
 import { newAeolus1, aeolus1Next } from '../logic.js';
-import { answers, save } from '../store.js';
+import { answers } from '../store.js';
 
 const NIGHT = { night: true };
 
@@ -128,7 +128,6 @@ async function askWho(stage, scroll) {
   await new Promise((resolve) => (submitted = resolve));
   answers.name = cleanName(nameInput.value);
   answers.homeland = homeland;
-  save();
   await box.leave();
 }
 
@@ -141,7 +140,6 @@ async function tellStory(stage, scroll) {
   // Saved on its own: every option names Polyphemus, and the return uses it against the visitor.
   answers.since = T.q7.options[since];
   scroll.append('account', answers.since);
-  save();
 }
 
 async function giveBag(stage, scroll) {
@@ -191,7 +189,6 @@ async function arrival(stage) {
   const first = await ask(stage, T.q1.text, T.q1.options);
   answers.purpose = T.q1.options[first];
   scroll.set('account', answers.purpose);
-  save();
   await remark(stage, T.r2);
 
   // Approved at the welcome, on a form with no name or story on it yet (user's decision, 2026-11-03):
@@ -359,7 +356,6 @@ async function theReturn(stage, curtain) {
   await pleading.leave();
   answers.help = T2.q2.options[help];
   scroll.set('help', answers.help);
-  save();
 
   // #3. A lot of lightning.
   const silence = await silentCloud(stage);
