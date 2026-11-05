@@ -432,32 +432,34 @@ export class Dropdown {
 
 /**
  * Opens a form: a line drawn in on the black screen, gone at once. The black stays.
- * A click anywhere ends it early.
+ * A click while it types shows the whole line, which then waits for another click.
+ * A click once the whole line is showing moves on. With no clicks, it plays through on its own.
  */
 export async function drawnLine(stage, text, cps = 16, { rich = true } = {}) {
   if (rich) await document.fonts.load("2.9rem 'Faculty Glyphic'").catch(() => {});
   const line = h('p', { class: rich ? 'drawn-line drawn-line-rich' : 'drawn-line' });
   stage.append(line);
   const token = { skip: false };
-  let onClick;
-  const skipped = new Promise((resolve) => {
-    onClick = () => {
+  let typed = false;
+  let clicked = false;
+  let moveOn;
+  const moved = new Promise((resolve) => (moveOn = resolve));
+  const onClick = () => {
+    if (!typed) {
       token.skip = true;
-      resolve();
-    };
-  });
+      return;
+    }
+    clicked = true;
+    moveOn();
+  };
   document.addEventListener('click', onClick);
-  const played = (async () => {
-    await typeInto(line, text, { cps, token });
-    await wait(1200);
-    if (token.skip) return;
-    await fadeOut(line, 500);
-    await wait(500);
-  })();
-  await Promise.race([played, skipped]);
+  await typeInto(line, text, { cps, token });
+  typed = true;
+  await (token.skip ? moved : Promise.race([wait(1200), moved]));
   document.removeEventListener('click', onClick);
-  if (token.skip) await anim(line, [{ opacity: 0 }], { duration: 150 });
+  await fadeOut(line, clicked ? 150 : 500);
   line.remove();
+  if (!clicked) await wait(500);
 }
 
 /** Pitch black overlay. */
