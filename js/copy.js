@@ -188,6 +188,16 @@ export const i589 = {
   pending: 'Pending Review…',
 };
 
+export const home = {
+  title: 'Where will you be seeking Xenia?',
+  forms: [
+    { id: 'aeolus', label: 'Aeolus' },
+    { id: 'ithaca', label: 'Ithaca' },
+    { id: 'goldcard', label: 'Gold Card' },
+    { id: 'i589', label: 'Asylum' },
+  ],
+};
+
 export const shared = {
   continueLabel: 'Continue',
   unsupported: 'This website is made for a larger screen, please switch.',
